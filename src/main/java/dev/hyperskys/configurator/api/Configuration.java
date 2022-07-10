@@ -7,8 +7,10 @@ package dev.hyperskys.configurator.api;
 
 import dev.hyperskys.configurator.Configurator;
 import dev.hyperskys.configurator.events.ConfigurationReloadEvent;
+import dev.hyperskys.configurator.events.ConfigurationSaveEvent;
 import dev.hyperskys.configurator.output.ConfiguratorLogger;
 import lombok.Getter;
+import lombok.Setter;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -30,6 +32,15 @@ public class Configuration {
     @Getter
     private long reloadTime = 0;
 
+    @Getter
+    private long saveTime = 0;
+
+    @Setter
+    private String failCreateNewFileMessage = "[" + plugin.getDescription().getName() + "] Failed to correct a new file, maybe it already exists?";
+
+    @Setter
+    private String failSaveConfigurationMessage = "[" + plugin.getDescription().getName() + "] Failed to save the configuration file, error log is below.";
+
     public Configuration(String fileName) {
         nameFile = fileName;
         plugin.getConfig().options().copyDefaults(true);
@@ -45,7 +56,7 @@ public class Configuration {
         if (!file.exists()){
             try {
                 if(!file.createNewFile()) {
-                    ConfiguratorLogger.logMessage("[" + plugin.getDescription().getName() + "] Failed to correct a new file, maybe it already exists?");
+                    ConfiguratorLogger.logMessage(failCreateNewFileMessage);
                 }
             } catch (IOException ignored) {}
         }
@@ -58,20 +69,28 @@ public class Configuration {
     }
 
     public void save() {
-        try{
-            customFile.save(file);
-        } catch (IOException e){
-            ConfiguratorLogger.logMessage("[" + plugin.getDescription().getName() + "] Failed to save the configuration file, error log is below.");
-            e.printStackTrace();
+        ConfigurationSaveEvent configurationSaveEvent = new ConfigurationSaveEvent(this);
+        Bukkit.getServer().getPluginManager().callEvent(configurationSaveEvent);
+
+        if (!configurationSaveEvent.isCancelled()) {
+            try {
+                long startTime = System.currentTimeMillis();
+                customFile.save(file);
+                saveTime = (System.currentTimeMillis() - startTime) / 1000;
+            } catch (IOException e){
+                ConfiguratorLogger.logMessage(failSaveConfigurationMessage);
+                e.printStackTrace();
+            }
         }
     }
 
     public void reload(){
-        long startTime = System.currentTimeMillis();
-        customFile = YamlConfiguration.loadConfiguration(file);
-        reloadTime = (System.currentTimeMillis() - startTime) / 1000;
-
         ConfigurationReloadEvent configurationReloadEvent = new ConfigurationReloadEvent(this);
         Bukkit.getServer().getPluginManager().callEvent(configurationReloadEvent);
+        if (!configurationReloadEvent.isCancelled()) {
+            long startTime = System.currentTimeMillis();
+            customFile = YamlConfiguration.loadConfiguration(file);
+            reloadTime = (System.currentTimeMillis() - startTime) / 1000;
+        }
     }
 }

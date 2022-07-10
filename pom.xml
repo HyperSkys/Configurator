@@ -6,7 +6,7 @@
 
     <groupId>dev.hyperskys</groupId>
     <artifactId>Configurator</artifactId>
-    <version>1.0.0-RELEASE</version>
+    <version>1.0.5-BETA</version>
     <packaging>jar</packaging>
 
     <name>Configurator</name>

@@ -32,10 +32,6 @@ public class Configuration {
 
     public Configuration(String fileName) {
         nameFile = fileName;
-        init();
-    }
-
-    public void init() {
         plugin.getConfig().options().copyDefaults(true);
         plugin.saveDefaultConfig();
         setup();

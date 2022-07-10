@@ -1,0 +1,41 @@
+name: Feature Request
+description: Suggest a Feature or Improvement
+title: "[Suggestion]: "
+labels: [Open, Suggestion]
+assignees: [HyperSkys]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for contributing ideas to the project!
+  - type: textarea
+    id: feature_suggestion
+    attributes:
+      label: Feature Request
+      description: Describe the feature or suggest an improvement.
+      placeholder: Make do this or maybe remove this...
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternative Options
+      description: Describe any alternatives you have thought of
+      placeholder: I tried this and also this...
+    validations:
+      required: false
+  - type: textarea
+    id: context
+    attributes:
+      label: Additional Context
+      description: Add any other information you would like to add.
+    validations:
+      required: false
+  - type: checkboxes
+    id: conditions
+    attributes:
+      label: Checklist
+      description: By submitting this request, you have checked these conditions.
+      options:
+        - label: My suggestion does not match any existing suggestions on this repository
+          required: true

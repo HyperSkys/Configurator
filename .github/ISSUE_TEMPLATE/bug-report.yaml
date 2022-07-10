@@ -1,0 +1,58 @@
+name: Bug Report
+description: Report an issue
+title: "[Bug]: "
+labels: [Open, General Bug]
+assignees: [HyperSkys]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to fill out this bug report!
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What Happened?
+      description: Describe the issue that happened.
+      placeholder: Describe what happened and how you reproduced it
+    validations:
+      required: true
+  - type: input
+    id: projecct-version
+    attributes:
+      label: Project Version
+      description: What version of this configuraiton library are you using?
+      placeholder: 1.0.0-RELEASE
+    validations:
+      required: true
+  - type: input
+    id: server-version
+    attributes:
+      label: Server Version
+      description: What server version are you using?
+      placeholder: Paper 1.8.8
+    validations:
+      required: true
+  - type: textarea
+    id: log
+    attributes:
+      label: Error Log Output
+      description: Please copy and paste the error log output that you recieved in your terminal
+      render: shell
+    validations:
+      required: false
+  - type: textarea
+    id: context
+    attributes:
+      label: Additional Information
+      description: Add any other additional information regarding your issue.
+      placeholder: This happens because I did this and this...
+    validations:
+      required: false
+  - type: checkboxes
+    id: conditions
+    attributes:
+      label: Checklist
+      description: By submitting this issue, you have reviewed these conditions.
+      options:
+        - label: My issue does not match any existing issues on this repository
+          required: true

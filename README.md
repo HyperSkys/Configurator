@@ -36,7 +36,7 @@ For maven please add these to your repositories and dependencies.
  <dependency>
     <groupId>com.github.HyperSkys</groupId>
     <artifactId>Configurator</artifactId>
-    <version>1.0.0-RELEASE</version>
+    <version>LATEST_VERSION_HERE</version>
 </dependency>
 ```
 
@@ -48,7 +48,7 @@ For gradle add this to your repositories and dependencies.
 maven { url 'https://jitpack.io' }
 ```
 ```
-implementation 'com.github.HyperSkys:Configurator:1.0.0-RELEASE'
+implementation 'com.github.HyperSkys:Configurator:LATEST_VERSION_HERE'
 ```
 
 

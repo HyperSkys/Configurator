@@ -10,8 +10,7 @@ import org.bukkit.plugin.Plugin;
 
 public class Configurator {
 
-    @Getter
-    private static Plugin plugin;
+    private @Getter static Plugin plugin;
 
     public static void setupConfigurator(Plugin instance) {
         plugin = instance;

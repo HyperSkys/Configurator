@@ -26,21 +26,17 @@ public class Configuration {
     private static FileConfiguration customFile;
     private final Plugin plugin = Configurator.getPlugin();
 
-    @Getter
-    private final String nameFile;
+    private @Getter final String nameFile;
+    private @Getter long reloadTime = 0;
+    private @Getter long saveTime = 0;
 
-    @Getter
-    private long reloadTime = 0;
+    private @Setter String failCreateNewFileMessage = "[" + plugin.getDescription().getName() + "] Failed to correct a new file, maybe it already exists?";
+    private @Setter String failSaveConfigurationMessage = "[" + plugin.getDescription().getName() + "] Failed to save the configuration file, error log is below.";
 
-    @Getter
-    private long saveTime = 0;
-
-    @Setter
-    private String failCreateNewFileMessage = "[" + plugin.getDescription().getName() + "] Failed to correct a new file, maybe it already exists?";
-
-    @Setter
-    private String failSaveConfigurationMessage = "[" + plugin.getDescription().getName() + "] Failed to save the configuration file, error log is below.";
-
+    /**
+     * The constructor for creating the configuration file, no need to initialize it's already done here.
+     * @param fileName The file you would like to create (ex: config.yml)
+     */
     public Configuration(String fileName) {
         nameFile = fileName;
         plugin.getConfig().options().copyDefaults(true);
@@ -50,10 +46,10 @@ public class Configuration {
         save();
     }
 
-    public void setup() {
+    private void setup() {
         file = new File(Objects.requireNonNull(Bukkit.getServer().getPluginManager().getPlugin(plugin.getDescription().getName())).getDataFolder(), nameFile);
 
-        if (!file.exists()){
+        if (!file.exists()) {
             try {
                 if(!file.createNewFile()) {
                     ConfiguratorLogger.logMessage(failCreateNewFileMessage);
@@ -64,10 +60,19 @@ public class Configuration {
         customFile = YamlConfiguration.loadConfiguration(file);
     }
 
-    public FileConfiguration get() {
+    /**
+     * This will allow you to access the features of the YamlConfiguration, such as setting and getting configuration values.
+     * @return An Instance of the YamlConfiguration
+     */
+    public FileConfiguration get() { // Note: Many Developers will probably point out I should use lombok, I would if lombok wouldn't default to `Instance.getCustomFile();`.
         return customFile;
     }
 
+    /**
+     * This saves the configuration file, please save it after changing configuration contents,
+     * working on an auto save feature,
+     * will be here soon.
+     */
     public void save() {
         ConfigurationSaveEvent configurationSaveEvent = new ConfigurationSaveEvent(this);
         Bukkit.getServer().getPluginManager().callEvent(configurationSaveEvent);
@@ -77,14 +82,17 @@ public class Configuration {
                 long startTime = System.currentTimeMillis();
                 customFile.save(file);
                 saveTime = (System.currentTimeMillis() - startTime) / 1000;
-            } catch (IOException e){
+            } catch (IOException e) {
                 ConfiguratorLogger.logMessage(failSaveConfigurationMessage);
                 e.printStackTrace();
             }
         }
     }
 
-    public void reload(){
+    /**
+     * Reloads the configuration file, allows the plugin to see the new updated contents of the file.
+     */
+    public void reload() {
         ConfigurationReloadEvent configurationReloadEvent = new ConfigurationReloadEvent(this);
         Bukkit.getServer().getPluginManager().callEvent(configurationReloadEvent);
         if (!configurationReloadEvent.isCancelled()) {

@@ -6,6 +6,8 @@
 package dev.hyperskys.configurator.api;
 
 import dev.hyperskys.configurator.Configurator;
+import dev.hyperskys.configurator.api.exception.ObjectAlreadyExistsException;
+import dev.hyperskys.configurator.api.exception.ObjectNotFoundException;
 import dev.hyperskys.configurator.events.ConfigurationReloadEvent;
 import dev.hyperskys.configurator.events.ConfigurationSaveEvent;
 import dev.hyperskys.configurator.output.ConfiguratorLogger;
@@ -35,7 +37,7 @@ public class Configuration {
 
     /**
      * The constructor for creating the configuration file, no need to initialize it's already done here.
-     * @param fileName The file you would like to create (ex: config.yml)
+     * @param fileName The file you would like to create (ex: config.yml).
      */
     public Configuration(String fileName) {
         nameFile = fileName;
@@ -61,10 +63,32 @@ public class Configuration {
     }
 
     /**
+     * This will allow you to grab values for the config while being safe from NullPointers.
+     * @return The stored value in the config designated by the path.
+     */
+    public Object getValue(String path) {
+        if (customFile.get(path) != null) return customFile.get(path);
+        throw new ObjectNotFoundException(path);
+    }
+
+    /**
+     * This will allow you to set values for the config while being safe from NullPointers.
+     */
+    public void setValue(String path, String value) {
+        if (customFile.get(path) != null) customFile.set(path, value);
+        throw new ObjectNotFoundException(path);
+    }
+
+    public void createSection(String section) {
+        if (customFile.getConfigurationSection(section) != null) customFile.createSection(section);
+        throw new ObjectAlreadyExistsException(section);
+    }
+
+    /**
      * This will allow you to access the features of the YamlConfiguration, such as setting and getting configuration values.
      * @return An Instance of the YamlConfiguration
      */
-    public FileConfiguration get() { // Note: Many Developers will probably point out I should use lombok, I would if lombok wouldn't default to `Instance.getCustomFile();`.
+    public FileConfiguration get() {
         return customFile;
     }
 

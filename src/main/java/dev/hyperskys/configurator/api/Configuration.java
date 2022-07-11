@@ -46,6 +46,7 @@ public class Configuration {
         setup();
         get().options().copyDefaults(true);
         save();
+        Configurator.listOfFiles.put(fileName, this);
     }
 
     private void setup() {

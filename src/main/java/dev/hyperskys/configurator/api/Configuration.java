@@ -26,7 +26,7 @@ public class Configuration {
 
     private static File file;
     private static FileConfiguration customFile;
-    private final Plugin plugin = Configurator.getPlugin();
+    private final Plugin plugin = Configurator.getPluginProvided();
 
     private @Getter final String nameFile;
     private @Getter long reloadTime = 0;
@@ -41,12 +41,16 @@ public class Configuration {
      */
     public Configuration(String fileName) {
         nameFile = fileName;
+        Configurator.listOfFiles.put(fileName, this);
+        init();
+    }
+
+    private void init() {
         plugin.getConfig().options().copyDefaults(true);
         plugin.saveDefaultConfig();
         setup();
         get().options().copyDefaults(true);
         save();
-        Configurator.listOfFiles.put(fileName, this);
     }
 
     private void setup() {

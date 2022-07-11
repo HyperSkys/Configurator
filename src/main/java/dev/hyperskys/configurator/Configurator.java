@@ -21,28 +21,38 @@ import java.util.jar.Attributes;
  */
 public class Configurator {
 
-    private @Getter static Plugin plugin;
+    private @Getter static Plugin pluginProvided;
     private @Getter static String packageDirectory;
     public static HashMap<String, Configuration> listOfFiles = new HashMap<>();
 
     /**
      * Set up of the projects global variables that is used for configurator.
      * @param instance An instance of the main plugin.
-     * @param packageName The package that the plugin is currently in. (ex. dev.hyperskys.configurator)
+     * @param packageName The package that the plugin is currently in. (ex. dev.hyperskys)
      */
     public static void setupConfigurator(Plugin instance, String packageName) {
-        plugin = instance;
+        pluginProvided = instance;
         packageDirectory = packageName;
 
-        for (Class<?> clazz : ReflectionUtils.findAllClassesUsingClassLoader(packageName)) {
+        System.out.println("class not found yet.");
+        System.out.println("finding classes.");
+        for (Class<?> clazz : ReflectionUtils.getClasses(packageName)) {
+            System.out.println("A class was found.");
             for (Field field : clazz.getFields()) {
+                System.out.println("A field was found in that class.");
                 if (field.isAnnotationPresent(GetValue.class)) {
+                    System.out.println("A field did have annotation to it.");
                     String fileName = field.getAnnotation(GetValue.class).file();
                     String pathName = field.getAnnotation(GetValue.class).path();
+                    System.out.println("Gathered field information.");
                     field.setAccessible(true);
+                    System.out.println("Setting field to accessible.");
                     try {
+                        System.out.println("Before setting value.");
                         field.set(listOfFiles.get(fileName), listOfFiles.get(fileName).get().get(pathName));
-                    } catch (IllegalAccessException ignored) {}
+                        System.out.println("After setting value.");
+                    } catch (IllegalAccessException ignored) {
+                    }
                 }
             }
         }

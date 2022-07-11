@@ -6,7 +6,7 @@
 
     <groupId>dev.hyperskys</groupId>
     <artifactId>Configurator</artifactId>
-    <version>1.0.6-BETA</version>
+    <version>1.0.7-STABLE</version>
     <packaging>jar</packaging>
 
     <name>Configurator</name>
@@ -68,7 +68,7 @@
     <dependencies>
         <dependency>
             <groupId>org.spigotmc</groupId>
-            <artifactId>spigot</artifactId>
+            <artifactId>spigot-api</artifactId>
             <version>1.8.8-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>

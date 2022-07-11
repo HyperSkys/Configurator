@@ -9,6 +9,7 @@ import dev.hyperskys.configurator.annotations.GetValue;
 import dev.hyperskys.configurator.api.Configuration;
 import dev.hyperskys.configurator.utils.ReflectionUtils;
 import lombok.Getter;
+import lombok.SneakyThrows;
 import org.bukkit.plugin.Plugin;
 
 import java.lang.reflect.Field;
@@ -30,31 +31,18 @@ public class Configurator {
      * @param instance An instance of the main plugin.
      * @param packageName The package that the plugin is currently in. (ex. dev.hyperskys)
      */
+    @SneakyThrows
     public static void setupConfigurator(Plugin instance, String packageName) {
         pluginProvided = instance;
         packageDirectory = packageName;
 
         System.out.println("class not found yet.");
         System.out.println("finding classes.");
-        for (Class<?> clazz : ReflectionUtils.getClasses(packageName)) {
-            System.out.println("A class was found.");
-            for (Field field : clazz.getFields()) {
-                System.out.println("A field was found in that class.");
-                if (field.isAnnotationPresent(GetValue.class)) {
-                    System.out.println("A field did have annotation to it.");
-                    String fileName = field.getAnnotation(GetValue.class).file();
-                    String pathName = field.getAnnotation(GetValue.class).path();
-                    System.out.println("Gathered field information.");
-                    field.setAccessible(true);
-                    System.out.println("Setting field to accessible.");
-                    try {
-                        System.out.println("Before setting value.");
-                        field.set(listOfFiles.get(fileName), listOfFiles.get(fileName).get().get(pathName));
-                        System.out.println("After setting value.");
-                    } catch (IllegalAccessException ignored) {
-                    }
-                }
-            }
+        for (Field field : ReflectionUtils.getFields(packageName)) {
+            String fileName = field.getAnnotation(GetValue.class).file();
+            String pathName = field.getAnnotation(GetValue.class).path();
+            field.setAccessible(true);
+            field.set(listOfFiles.get(fileName), listOfFiles.get(fileName).get().get(pathName));
         }
     }
 }

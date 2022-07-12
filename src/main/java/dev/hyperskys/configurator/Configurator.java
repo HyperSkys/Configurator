@@ -14,7 +14,6 @@ import org.bukkit.plugin.Plugin;
 
 import java.lang.reflect.Field;
 import java.util.HashMap;
-import java.util.jar.Attributes;
 
 /**
  * The configurator class for initializing all things to do with Configurator.
@@ -23,26 +22,19 @@ import java.util.jar.Attributes;
 public class Configurator {
 
     private @Getter static Plugin pluginProvided;
-    private @Getter static String packageDirectory;
     public static HashMap<String, Configuration> listOfFiles = new HashMap<>();
 
     /**
      * Set up of the projects global variables that is used for configurator.
      * @param instance An instance of the main plugin.
-     * @param packageName The package that the plugin is currently in. (ex. dev.hyperskys)
      */
     @SneakyThrows
-    public static void setupConfigurator(Plugin instance, String packageName) {
+    public static void setupConfigurator(Plugin instance) {
         pluginProvided = instance;
-        packageDirectory = packageName;
 
-        System.out.println("class not found yet.");
-        System.out.println("finding classes.");
-        for (Field field : ReflectionUtils.getFields(packageName)) {
-            String fileName = field.getAnnotation(GetValue.class).file();
-            String pathName = field.getAnnotation(GetValue.class).path();
+        for (Field field : ReflectionUtils.getFieldsAnnotated(GetValue.class, instance.getClass().getPackage().getName())) {
             field.setAccessible(true);
-            field.set(listOfFiles.get(fileName), listOfFiles.get(fileName).get().get(pathName));
+            field.set(listOfFiles.get(field.getAnnotation(GetValue.class).file()), listOfFiles.get(field.getAnnotation(GetValue.class).file()).get().get(field.getAnnotation(GetValue.class).path()));
         }
     }
 }

@@ -15,7 +15,8 @@ You can download Configurator and use it on your projects by heading to the rele
 Here is an example of making a configuration file for your plugin, it is really this simple.
 
 ```java
-Configuration configFile = new Configuration("config.yml");
+private static Configuration configFile = new Configuration("config.yml");
+public static String @GetValue(file = "config.yml", path = "Settings.prefix") prefix;
 Configurator.setupConfigurator(this);
 ```
 

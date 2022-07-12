@@ -1,13 +1,26 @@
+/**
+ * @author HyperSkys Development
+ * Copyright (C) 2020-2022 - HyperSkys Development
+ */
+
 package dev.hyperskys.configurator.utils;
 
-import dev.hyperskys.configurator.annotations.GetValue;
 import org.reflections.Reflections;
+import org.reflections.scanners.FieldAnnotationsScanner;
+import org.reflections.util.ClasspathHelper;
+import org.reflections.util.ConfigurationBuilder;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.util.Set;
 
 public class ReflectionUtils {
-    public static Set<Field> getFields(String packageDirectory) {
-        return new Reflections(packageDirectory).getFieldsAnnotatedWith(GetValue.class);
+    public static Set<Field> getFieldsAnnotated(Class<? extends Annotation> annotation, String packageName) {
+        Reflections reflections = new Reflections(
+                new ConfigurationBuilder()
+                        .setUrls(ClasspathHelper.forPackage(packageName))
+                        .setScanners(new FieldAnnotationsScanner()))
+        ;
+        return reflections.getFieldsAnnotatedWith(annotation);
     }
 }

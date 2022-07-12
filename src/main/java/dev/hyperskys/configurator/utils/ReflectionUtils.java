@@ -9,6 +9,7 @@ import org.reflections.Reflections;
 import org.reflections.scanners.FieldAnnotationsScanner;
 import org.reflections.util.ClasspathHelper;
 import org.reflections.util.ConfigurationBuilder;
+import org.slf4j.LoggerFactory;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
@@ -23,8 +24,15 @@ public class ReflectionUtils {
         Reflections reflections = new Reflections(
                 new ConfigurationBuilder()
                         .setUrls(ClasspathHelper.forPackage(packageName))
-                        .setScanners(new FieldAnnotationsScanner()))
+                        .setScanners(new FieldAnnotationsScanner())
+                        )
         ;
         return reflections.getFieldsAnnotatedWith(annotation);
+    }
+
+    public static void disableReflectionsLogger() {
+        ch.qos.logback.classic.Logger root;
+        root = (ch.qos.logback.classic.Logger) LoggerFactory.getLogger("org.reflections");
+        root.setLevel(ch.qos.logback.classic.Level.OFF);
     }
 }

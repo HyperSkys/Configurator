@@ -32,6 +32,7 @@ public class Configurator {
     public static void setupConfigurator(Plugin instance) {
         pluginProvided = instance;
         if (instance == null) throw new PluginNotFoundException();
+        ReflectionUtils.disableReflectionsLogger();
 
         instance.getServer().getScheduler().runTaskTimer(instance, () -> {
             for (Field field : ReflectionUtils.getFieldsAnnotated(GetValue.class, Configurator.getPluginProvided().getClass().getPackage().getName())) {

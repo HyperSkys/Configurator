@@ -20,5 +20,4 @@ import java.lang.annotation.Target;
 public @interface GetValue {
     String file();
     String path();
-    String defaultValue() default "";
 }

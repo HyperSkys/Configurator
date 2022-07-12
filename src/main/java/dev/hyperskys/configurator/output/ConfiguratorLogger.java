@@ -7,6 +7,10 @@ package dev.hyperskys.configurator.output;
 
 import org.bukkit.Bukkit;
 
+/**
+ * The configurator logger for logging information and stuff.
+ * @since 1.0.0-RELEASE
+ */
 public class ConfiguratorLogger {
     /**
      * This is just a simple logger to make logging messages much quicker in production.

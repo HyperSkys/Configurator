@@ -10,6 +10,10 @@ import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
+/**
+ * This event will fire if any configuration file is reloaded.
+ * @since 1.0.0-RELEASE
+ */
 public class ConfigurationReloadEvent extends Event implements Cancellable {
 
     private static final HandlerList handlers = new HandlerList();

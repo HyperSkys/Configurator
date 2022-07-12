@@ -22,6 +22,10 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Objects;
 
+/**
+ * The configuration file and the primary part of Configurator.
+ * @since 1.0.0-RELEASE
+ */
 public class Configuration {
 
     private static File file;
@@ -41,7 +45,6 @@ public class Configuration {
      */
     public Configuration(String fileName) {
         nameFile = fileName;
-        Configurator.listOfFiles.put(fileName, this);
         init();
     }
 

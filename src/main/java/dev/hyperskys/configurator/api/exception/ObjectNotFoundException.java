@@ -5,7 +5,15 @@
 
 package dev.hyperskys.configurator.api.exception;
 
+/**
+ * Will fire if an object was not found in configuration file.
+ * @since 1.0.5-BETA
+ */
 public class ObjectNotFoundException extends RuntimeException {
+    /**
+     * The constructor for the exception that will throw.
+     * @param path The path of the configuration value (ex. Settings.prefix)
+     */
     public ObjectNotFoundException(String path) {
         super(path);
     }

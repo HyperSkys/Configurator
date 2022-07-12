@@ -14,6 +14,10 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.util.Set;
 
+/**
+ * Some awesome cool ways to get all fields annotated with a value.
+ * @since 1.0.7-STABLE
+ */
 public class ReflectionUtils {
     public static Set<Field> getFieldsAnnotated(Class<? extends Annotation> annotation, String packageName) {
         Reflections reflections = new Reflections(

@@ -9,6 +9,7 @@ import dev.hyperskys.configurator.api.Configuration;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
+import org.bukkit.event.player.PlayerMoveEvent;
 
 /**
  * This event will fire if any configuration file is reloaded.
@@ -16,10 +17,9 @@ import org.bukkit.event.HandlerList;
  */
 public class ConfigurationReloadEvent extends Event implements Cancellable {
 
-    private static final HandlerList handlers = new HandlerList();
+    public static final HandlerList handlers = new HandlerList();
     private static Configuration configurationFile = null;
     private static boolean isCancelled;
-
     /**
      * The constructor that sets up the event, only needed for firing the event.
      * @param configuration An instance of the Configuration file
@@ -58,6 +58,14 @@ public class ConfigurationReloadEvent extends Event implements Cancellable {
      */
     @Override
     public HandlerList getHandlers() {
+        return handlers;
+    }
+
+    /**
+     * Bukkit needs this because it likes men.
+     * @return The handlers list
+     */
+    public static HandlerList getHandlerList() {
         return handlers;
     }
 

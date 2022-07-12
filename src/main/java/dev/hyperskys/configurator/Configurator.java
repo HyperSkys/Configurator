@@ -33,14 +33,20 @@ public class Configurator {
         pluginProvided = instance;
         if (instance == null) throw new PluginNotFoundException();
 
-        for (Field field : ReflectionUtils.getFieldsAnnotated(GetValue.class, instance.getClass().getPackage().getName())) {
-            String fileProvided = field.getAnnotation(GetValue.class).file();
-            String pathOfValue = field.getAnnotation(GetValue.class).path();
+        instance.getServer().getScheduler().runTaskTimer(instance, () -> {
+            for (Field field : ReflectionUtils.getFieldsAnnotated(GetValue.class, Configurator.getPluginProvided().getClass().getPackage().getName())) {
+                String fileProvided = field.getAnnotation(GetValue.class).file();
+                String pathOfValue = field.getAnnotation(GetValue.class).path();
 
-            if (FileUtils.findConfiguration(fileProvided, instance).get(pathOfValue) == null) {
-                field.setAccessible(true);
-                field.set(null, FileUtils.findConfiguration(fileProvided, instance).get(pathOfValue));
+                if (FileUtils.findConfiguration(fileProvided, Configurator.getPluginProvided()).get(pathOfValue) != null) {
+                    field.setAccessible(true);
+                    try {
+                        field.set(null, FileUtils.findConfiguration(fileProvided, Configurator.getPluginProvided()).get(pathOfValue));
+                    } catch (IllegalAccessException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
             }
-        }
+        }, 20 * 5, 20 * 5);
     }
 }

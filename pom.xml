@@ -103,11 +103,5 @@
             <artifactId>guava</artifactId>
             <version>31.1-jre</version>
         </dependency>
-        <dependency>
-            <groupId>ch.qos.logback</groupId>
-            <artifactId>logback-classic</artifactId>
-            <version>1.2.11</version>
-            <scope>compile</scope>
-        </dependency>
     </dependencies>
 </project>

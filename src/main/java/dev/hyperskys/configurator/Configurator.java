@@ -19,7 +19,6 @@ import java.lang.reflect.Field;
  * The configurator class for initializing all things to do with Configurator.
  * @since 1.0.0-RELEASE
  * @version 2.0.0-RELEASE
- * @// TODO: 7/12/2022 Grab an instance of configuration file, also get an instance of class that has the field in it and grabbing that field.
  */
 public class Configurator {
 

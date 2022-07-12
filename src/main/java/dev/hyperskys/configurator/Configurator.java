@@ -6,12 +6,10 @@
 package dev.hyperskys.configurator;
 
 import dev.hyperskys.configurator.annotations.GetValue;
-import dev.hyperskys.configurator.api.exception.ObjectReturnNullException;
 import dev.hyperskys.configurator.utils.FileUtils;
 import dev.hyperskys.configurator.utils.ReflectionUtils;
 import lombok.Getter;
 import lombok.SneakyThrows;
-import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 
 import java.lang.reflect.Field;
@@ -42,10 +40,6 @@ public class Configurator {
 
             if (FileUtils.findConfiguration(fileProvided, instance).get(pathOfValue) == null && defaultValue != null) {
                 field.set(null, FileUtils.findConfiguration(fileProvided, instance).get(defaultValue));
-            }
-
-            if (FileUtils.findConfiguration(fileProvided, instance).get(pathOfValue) == null && defaultValue == null) {
-                throw new ObjectReturnNullException(pathOfValue);
             }
 
             field.set(null, FileUtils.findConfiguration(fileProvided, instance).get(pathOfValue));

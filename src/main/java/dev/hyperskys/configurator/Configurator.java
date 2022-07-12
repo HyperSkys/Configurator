@@ -6,9 +6,11 @@
 package dev.hyperskys.configurator;
 
 import dev.hyperskys.configurator.annotations.GetValue;
+import dev.hyperskys.configurator.utils.FileUtils;
 import dev.hyperskys.configurator.utils.ReflectionUtils;
 import lombok.Getter;
 import lombok.SneakyThrows;
+import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 
 import java.lang.reflect.Field;
@@ -23,6 +25,7 @@ public class Configurator {
 
     private @Getter static Plugin pluginProvided;
 
+
     /**
      * Set up of the projects global variables that is used for configurator.
      * @param instance An instance of the main plugin.
@@ -36,7 +39,7 @@ public class Configurator {
             String pathOfValue = field.getAnnotation(GetValue.class).path();
 
             field.setAccessible(true);
-            // field.set(listOfFiles.get(fileProvided), listOfFiles.get(field.getAnnotation(GetValue.class).file()).get().get(field.getAnnotation(GetValue.class).path()));
+            field.set(null, FileUtils.findConfiguration(fileProvided, instance).get(pathOfValue));
         }
     }
 }

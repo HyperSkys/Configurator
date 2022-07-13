@@ -18,7 +18,7 @@ import java.lang.reflect.Field;
 /**
  * The configurator class for initializing all things to do with Configurator.
  * @since 1.0.0-RELEASE
- * @version 2.0.0-RELEASE
+ * @version 2.0.1-STABLE
  */
 public class Configurator {
 
@@ -48,6 +48,6 @@ public class Configurator {
                     }
                 }
             }
-        }, 20 * 5, 20 * 5);
+        }, 20, 20);
     }
 }

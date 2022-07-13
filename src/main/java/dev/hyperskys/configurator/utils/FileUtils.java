@@ -1,11 +1,14 @@
 package dev.hyperskys.configurator.utils;
 
+import dev.hyperskys.configurator.Configurator;
+import dev.hyperskys.configurator.annotations.GetValue;
 import dev.hyperskys.configurator.api.exception.ObjectNotFoundException;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.Plugin;
 
 import java.io.File;
+import java.lang.reflect.Field;
 import java.util.Objects;
 
 /**
@@ -25,5 +28,24 @@ public class FileUtils {
         }
 
         throw new ObjectNotFoundException(fileName);
+    }
+
+    /**
+     * Updates the fields with all their correct configuration values.
+     */
+    public static void updateFiles() {
+        for (Field field : ReflectionUtils.getFieldsAnnotated(GetValue.class, Configurator.getPluginProvided().getClass().getPackage().getName())) {
+            String fileProvided = field.getAnnotation(GetValue.class).file();
+            String pathOfValue = field.getAnnotation(GetValue.class).path();
+
+            if (FileUtils.findConfiguration(fileProvided, Configurator.getPluginProvided()).get(pathOfValue) != null) {
+                field.setAccessible(true);
+                try {
+                    field.set(null, FileUtils.findConfiguration(fileProvided, Configurator.getPluginProvided()).get(pathOfValue));
+                } catch (IllegalAccessException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }
     }
 }

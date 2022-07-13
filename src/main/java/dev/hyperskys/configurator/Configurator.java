@@ -33,6 +33,7 @@ public class Configurator {
         pluginProvided = instance;
         if (instance == null) throw new PluginNotFoundException();
         ReflectionUtils.disableReflectionsLogger();
+        FileUtils.updateFiles();
 
         instance.getServer().getScheduler().runTaskTimer(instance, () -> {
             for (Field field : ReflectionUtils.getFieldsAnnotated(GetValue.class, Configurator.getPluginProvided().getClass().getPackage().getName())) {
@@ -41,13 +42,9 @@ public class Configurator {
 
                 if (FileUtils.findConfiguration(fileProvided, Configurator.getPluginProvided()).get(pathOfValue) != null) {
                     field.setAccessible(true);
-                    try {
-                        field.set(null, FileUtils.findConfiguration(fileProvided, Configurator.getPluginProvided()).get(pathOfValue));
-                    } catch (IllegalAccessException e) {
-                        throw new RuntimeException(e);
-                    }
+                    FileUtils.updateFiles();
                 }
             }
-        }, 20, 20);
+        }, 0, 20*2);
     }
 }

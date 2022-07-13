@@ -30,21 +30,12 @@ public class Configurator {
      */
     @SneakyThrows
     public static void setupConfigurator(Plugin instance) {
-        pluginProvided = instance;
         if (instance == null) throw new PluginNotFoundException();
+
+        pluginProvided = instance;
         ReflectionUtils.disableReflectionsLogger();
         FileUtils.updateFiles();
 
-        instance.getServer().getScheduler().runTaskTimer(instance, () -> {
-            for (Field field : ReflectionUtils.getFieldsAnnotated(GetValue.class, Configurator.getPluginProvided().getClass().getPackage().getName())) {
-                String fileProvided = field.getAnnotation(GetValue.class).file();
-                String pathOfValue = field.getAnnotation(GetValue.class).path();
-
-                if (FileUtils.findConfiguration(fileProvided, Configurator.getPluginProvided()).get(pathOfValue) != null) {
-                    field.setAccessible(true);
-                    FileUtils.updateFiles();
-                }
-            }
-        }, 0, 20*2);
+        instance.getServer().getScheduler().runTaskTimer(instance, FileUtils::updateFiles, 0, 20*2);
     }
 }

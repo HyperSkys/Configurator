@@ -6,14 +6,13 @@
 package dev.hyperskys.configurator.api;
 
 import dev.hyperskys.configurator.Configurator;
-import dev.hyperskys.configurator.annotations.GetValue;
 import dev.hyperskys.configurator.api.exception.ObjectAlreadyExistsException;
 import dev.hyperskys.configurator.api.exception.ObjectNotFoundException;
 import dev.hyperskys.configurator.events.ConfigurationReloadEvent;
 import dev.hyperskys.configurator.events.ConfigurationSaveEvent;
 import dev.hyperskys.configurator.output.ConfiguratorLogger;
 import dev.hyperskys.configurator.utils.FileUtils;
-import dev.hyperskys.configurator.utils.ReflectionUtils;
+
 import lombok.Getter;
 import lombok.Setter;
 import lombok.SneakyThrows;
@@ -21,11 +20,9 @@ import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.Plugin;
-import org.bukkit.scheduler.BukkitRunnable;
 
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.Field;
 import java.util.Objects;
 
 /**
@@ -145,16 +142,7 @@ public class Configuration {
             long startTime = System.currentTimeMillis();
             customFile = YamlConfiguration.loadConfiguration(file);
             reloadTime = (System.currentTimeMillis() - startTime) / 1000;
-
-            for (Field field : ReflectionUtils.getFieldsAnnotated(GetValue.class, Configurator.getPluginProvided().getClass().getPackage().getName())) {
-                String fileProvided = field.getAnnotation(GetValue.class).file();
-                String pathOfValue = field.getAnnotation(GetValue.class).path();
-
-                if (FileUtils.findConfiguration(fileProvided, Configurator.getPluginProvided()).get(pathOfValue) != null) {
-                    field.setAccessible(true);
-                    field.set(null, FileUtils.findConfiguration(fileProvided, Configurator.getPluginProvided()).get(pathOfValue));
-                }
-            }
+            FileUtils.updateFiles();
         }
     }
 }

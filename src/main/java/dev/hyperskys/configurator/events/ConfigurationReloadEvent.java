@@ -9,7 +9,6 @@ import dev.hyperskys.configurator.api.Configuration;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
-import org.bukkit.event.player.PlayerMoveEvent;
 
 /**
  * This event will fire if any configuration file is reloaded.

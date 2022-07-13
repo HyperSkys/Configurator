@@ -5,15 +5,13 @@
 
 package dev.hyperskys.configurator;
 
-import dev.hyperskys.configurator.annotations.GetValue;
+import dev.hyperskys.configurator.api.exception.ObjectNotFoundException;
 import dev.hyperskys.configurator.api.exception.PluginNotFoundException;
 import dev.hyperskys.configurator.utils.FileUtils;
 import dev.hyperskys.configurator.utils.ReflectionUtils;
 import lombok.Getter;
 import lombok.SneakyThrows;
 import org.bukkit.plugin.Plugin;
-
-import java.lang.reflect.Field;
 
 /**
  * The configurator class for initializing all things to do with Configurator.
@@ -30,12 +28,12 @@ public class Configurator {
      */
     @SneakyThrows
     public static void setupConfigurator(Plugin instance) {
-        if (instance == null) throw new PluginNotFoundException();
-
-        pluginProvided = instance;
         ReflectionUtils.disableReflectionsLogger();
-        FileUtils.updateFiles();
+        if (instance == null) throw new PluginNotFoundException();
+        pluginProvided = instance;
 
-        instance.getServer().getScheduler().runTaskTimer(instance, FileUtils::updateFiles, 0, 20*2);
+        try { FileUtils.updateFiles(); }
+        catch (ObjectNotFoundException ignored) {}
+        instance.getServer().getScheduler().runTaskTimer(instance, FileUtils::updateFiles, 20*2, 20*2);
     }
 }

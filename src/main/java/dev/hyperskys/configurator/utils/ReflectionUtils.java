@@ -19,6 +19,12 @@ import java.util.Set;
  * @since 1.0.7-STABLE
  */
 public class ReflectionUtils {
+    /**
+     * Allows you to grab all fields annotated with an annotation in a package.
+     * @param annotation The annotation you are trying to get.
+     * @param packageName The name of the package.
+     * @return All the fields annotated with annotation parameter.
+     */
     public static Set<Field> getFieldsAnnotated(Class<? extends Annotation> annotation, String packageName) {
         Reflections reflections = new Reflections(
                 new ConfigurationBuilder()
@@ -29,6 +35,9 @@ public class ReflectionUtils {
         return reflections.getFieldsAnnotatedWith(annotation);
     }
 
+    /**
+     * Disables the reflections logger because it sucks, :(
+     */
     public static void disableReflectionsLogger() {
         System.setProperty("org.slf4j.simpleLogger.log.org.reflections", "off");
     }
